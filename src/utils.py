@@ -7,7 +7,7 @@ class DataClass:
     def __init__(self, api_key: str, api_secret: str):
         self.__client = Client(api_key, api_secret)
 
-    # Make a dataframe from the data and return it
+    # Make a dataframe of the trading pair every hour over the specified number of days
     def get_data(self, pair: str, days: int):
         data = self.__client.get_historical_klines(
             pair, self.__client.KLINE_INTERVAL_1HOUR, f"{days} day ago UTC")
