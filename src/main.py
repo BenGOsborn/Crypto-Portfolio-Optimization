@@ -3,6 +3,7 @@ import os
 try:
     from dotenv import load_dotenv
     load_dotenv()
+    print("Loaded environment variables from .env")
 except:
     pass
 
