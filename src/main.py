@@ -20,7 +20,7 @@ def main():
     # https://youtu.be/vHzlZECzyPE - Correlation
 
     # Get the data pairs
-    print(sorted_correlations)
+    print(Utils.get_correlations(data, 15, limit=10))
 
 
 if __name__ == "__main__":
