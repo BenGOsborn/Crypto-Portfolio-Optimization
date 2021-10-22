@@ -42,4 +42,7 @@ class Utils:
     def correlation(df1: pd.DateOffset, df2: pd.DataFrame):
         close1 = df1["close"].pct_change()
         close2 = df2["close"].pct_change()
-        return np.corrcoef(close1.values[1:], close2.values[1:])[0, 1]
+        corr = np.corrcoef(close1.values[1:], close2.values[1:])[0, 1]
+        if corr == np.nan:
+            raise Exception("Returned NaN")
+        return corr
