@@ -8,6 +8,7 @@ except:
 
 from utils import DataClass, Utils
 import itertools
+import numpy as np
 
 
 def main():
@@ -22,10 +23,11 @@ def main():
 
     # Get the data pairs
     pairs = data.get_pairs()
+    np.random.shuffle(pairs)
 
     correlations = []
     days = 20
-    for pair in itertools.combinations(pairs[:20], 2):
+    for pair in itertools.combinations(pairs[:15], 2):
         try:
             data1 = data.get_data(pair[0], days)
             data2 = data.get_data(pair[1], days)
@@ -34,7 +36,8 @@ def main():
         except Exception as e:
             print(f"Encountered exception '{e}' for pair '{pair}'")
 
-    print(correlations)
+    sorted_correlations = sorted(correlations, key=lambda x: x[2])
+    print(sorted_correlations)
 
 
 if __name__ == "__main__":
