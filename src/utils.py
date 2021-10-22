@@ -30,6 +30,8 @@ class DataClass:
         df["open_time"] = pd.to_datetime((pd.to_numeric(
             df["open_time"]) / 1000).apply(lambda x: datetime.fromtimestamp(x)))
         df.set_index("open_time", inplace=True)
+        df["open"], df["high"], df["low"], df["close"] = pd.to_numeric(df["open"]), pd.to_numeric(
+            df["high"]), pd.to_numeric(df["low"]), pd.to_numeric(df["close"])
 
         return df
 

@@ -6,7 +6,7 @@ try:
 except:
     pass
 
-from utils import DataClass
+from utils import DataClass, Utils
 
 
 def main():
@@ -19,8 +19,14 @@ def main():
     # https://youtu.be/mJTrQfzr0R4 - Modern portfolio theory
     # https://youtu.be/vHzlZECzyPE - Correlation
 
-    print(data.get_data("ETHUSDT", 20))
     # print(data.get_pairs())
+
+    btc = data.get_data("BTCUSDT", 20)
+    eth = data.get_data("ETHUSDT", 20)
+
+    print(btc)
+
+    # print(Utils.correlation(btc, eth))
 
 
 if __name__ == "__main__":
