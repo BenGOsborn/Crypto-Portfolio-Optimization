@@ -14,7 +14,7 @@ class DataClass:
         raw_tickers = self.__client.get_all_tickers()
         tickers = []
         for ticker in raw_tickers:
-            if ticker["symbol"].endswith(self.__default_pair) and not ticker["symbol"].startswith(self.__default_pair):
+            if ticker["symbol"].endswith(self.__default_pair) and not ticker["symbol"].startswith(self.__default_pair) and not "DOWN" in ticker["symbol"] and not "UP" in ticker["symbol"]:
                 tickers.append(ticker["symbol"])
 
         return tickers
