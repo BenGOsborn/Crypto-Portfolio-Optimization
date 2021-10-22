@@ -10,6 +10,7 @@ except:
 
 def main():
     api_key = os.getenv("API_KEY")
+    api_secret = os.getenv("API_SECRET")
     x = Client(api_key)
 
 
