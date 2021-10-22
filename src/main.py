@@ -16,7 +16,7 @@ def main():
 
     data = DataClass(api_key, api_secret)
 
-    # https://www.youtube.com/watch?v=mJTrQfzr0R4&t=1s
+    # https://www.youtube.com/watch?v=mJTrQfzr0R4&t=1s - Modern portfolio theory
 
     print(data.get_data("ETHUSDT", 20))
     # print(data.get_pairs())
