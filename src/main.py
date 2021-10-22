@@ -26,10 +26,13 @@ def main():
     correlations = []
     days = 20
     for pair in itertools.combinations(pairs, 2):
-        data1 = data.get_data(pair[0], days)
-        data2 = data.get_data(pair[1], days)
-        corr = Utils.correlation(data1, data2)
-        correlations.append((pair[0], pair[1], corr))
+        try:
+            data1 = data.get_data(pair[0], days)
+            data2 = data.get_data(pair[1], days)
+            corr = Utils.correlation(data1, data2)
+            correlations.append((pair[0], pair[1], corr))
+        except Exception as e:
+            print(e)
 
     print(correlations)
 
