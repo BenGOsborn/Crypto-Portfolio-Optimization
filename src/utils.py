@@ -4,8 +4,19 @@ import pandas as pd
 
 
 class DataClass:
-    def __init__(self, api_key: str, api_secret: str):
+    def __init__(self, api_key: str, api_secret: str, default_pair: str = "USDT"):
         self.__client = Client(api_key, api_secret)
+        self.__default_pair = default_pair
+
+    # Get all tickers
+    def get_pairs(self):
+        raw_tickers = self.__client.get_all_tickers()
+        tickers = []
+        for ticker in raw_tickers:
+            if ticker["symbol"].endswith(self.__default_pair) and not ticker["symbol"].startswith(self.__default_pair):
+                tickers.append(ticker["symbol"])
+
+        return tickers
 
     # Make a dataframe of the trading pair every hour over the specified number of days
     def get_data(self, pair: str, days: int):
