@@ -1,5 +1,4 @@
 from binance import Client
-from numpy import number
 import pandas as pd
 from datetime import datetime
 
