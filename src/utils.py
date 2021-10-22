@@ -1,6 +1,7 @@
 from binance import Client
 from numpy import number
 import pandas as pd
+from datetime import datetime
 
 
 class DataClass:
@@ -26,5 +27,8 @@ class DataClass:
                 "num_trades", "taker_buy_base_asset_volume", "taker_buy_quote_asset_volume", "ignore"]
         df = pd.DataFrame(data, columns=cols)
         df = df.iloc[:, 0:5]
+        df["open_time"] = pd.to_datetime((pd.to_numeric(
+            df["open_time"]) / 1000).apply(lambda x: datetime.fromtimestamp(x)))
+        df.set_index("open_time", inplace=True)
 
         return df

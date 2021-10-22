@@ -16,8 +16,8 @@ def main():
 
     data = DataClass(api_key, api_secret)
 
-    # print(data.get_data("ETHUSDT", 20))
-    print(data.get_pairs())
+    print(data.get_data("ETHUSDT", 20))
+    # print(data.get_pairs())
 
 
 if __name__ == "__main__":
