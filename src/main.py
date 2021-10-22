@@ -7,6 +7,7 @@ except:
     pass
 
 from utils import DataClass, Utils
+import itertools
 
 
 def main():
@@ -19,12 +20,18 @@ def main():
     # https://youtu.be/mJTrQfzr0R4 - Modern portfolio theory
     # https://youtu.be/vHzlZECzyPE - Correlation
 
-    # print(data.get_pairs())
+    # Get the data pairs
+    pairs = data.get_pairs()
 
-    btc = data.get_data("BTCUSDT", 20)
-    eth = data.get_data("ETHUSDT", 20)
+    correlations = []
+    days = 20
+    for pair in itertools.combinations(pairs, 2):
+        data1 = data.get_data(pair[0], days)
+        data2 = data.get_data(pair[1], days)
+        corr = Utils.correlation(data1, data2)
+        correlations.append((pair[0], pair[1], corr))
 
-    print(Utils.correlation(btc, eth))
+    print(correlations)
 
 
 if __name__ == "__main__":
