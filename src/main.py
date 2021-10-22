@@ -27,7 +27,7 @@ def main():
 
     correlations = []
     days = 20
-    for pair in itertools.combinations(pairs[:15], 2):
+    for pair in itertools.combinations(pairs[:10], 2):
         try:
             data1 = data.get_data(pair[0], days)
             data2 = data.get_data(pair[1], days)
