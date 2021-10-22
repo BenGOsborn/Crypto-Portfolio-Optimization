@@ -10,8 +10,7 @@ except:
 
 def main():
     api_key = os.getenv("API_KEY")
-
-    x = Client()
+    x = Client(api_key)
 
 
 if __name__ == "__main__":
