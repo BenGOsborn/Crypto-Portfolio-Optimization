@@ -16,7 +16,8 @@ def main():
 
     data = DataClass(api_key, api_secret)
 
-    # https://www.youtube.com/watch?v=mJTrQfzr0R4&t=1s - Modern portfolio theory
+    # https://youtu.be/mJTrQfzr0R4 - Modern portfolio theory
+    # https://youtu.be/vHzlZECzyPE - Correlation
 
     print(data.get_data("ETHUSDT", 20))
     # print(data.get_pairs())
