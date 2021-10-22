@@ -1,5 +1,6 @@
 from binance import Client
 import pandas as pd
+import numpy as np
 from datetime import datetime
 
 
@@ -31,3 +32,10 @@ class DataClass:
         df.set_index("open_time", inplace=True)
 
         return df
+
+
+class Utils:
+    # Return the price percent changes and volume percent change correlation coefficients
+    @staticmethod
+    def correlation(df1: pd.DateOffset, df2: pd.DataFrame):
+        return np.corrcoef(df1["close"].pct_change().values, df2["close"].pct_change().values)
