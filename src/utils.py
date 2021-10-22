@@ -37,7 +37,9 @@ class DataClass:
 
 
 class Utils:
-    # Return the price percent changes and volume percent change correlation coefficients
+    # Return the price percent changes correlation coefficient
     @staticmethod
     def correlation(df1: pd.DateOffset, df2: pd.DataFrame):
-        return np.corrcoef(df1["close"].pct_change().values, df2["close"].pct_change().values), np.corrcoef(df1["volume"].pct_change().values, df2["volume"].pct_change().values)
+        close1 = df1["close"].pct_change()
+        close2 = df2["close"].pct_change()
+        return np.corrcoef(close1.values[1:], close2.values[1:])[0, 1]

@@ -24,9 +24,7 @@ def main():
     btc = data.get_data("BTCUSDT", 20)
     eth = data.get_data("ETHUSDT", 20)
 
-    print(btc)
-
-    # print(Utils.correlation(btc, eth))
+    print(Utils.correlation(btc, eth))
 
 
 if __name__ == "__main__":
