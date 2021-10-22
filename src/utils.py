@@ -53,8 +53,8 @@ class Utils:
     def get_correlations(data: DataClass, days: int, limit: int = None, inverse: bool = True):
         pairs = data.get_pairs()
         if limit != None:
-            pairs = pairs[:limit]
             np.random.shuffle(pairs)
+            pairs = pairs[:limit]
 
         correlations = []
         for pair in itertools.combinations(pairs, 2):
