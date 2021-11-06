@@ -29,7 +29,7 @@ def main():
     correlations = []
     for combo in combinations:
         # Because chisquare can only work on numbers and not percentages
-        correlation = get_correlation(cache[combo[0]], cache[combo[1]]) * 10
+        correlation = get_correlation(cache[combo[0]], cache[combo[1]]) * 100
         correlations.append(correlation)
 
     result = chisquare(correlations)
