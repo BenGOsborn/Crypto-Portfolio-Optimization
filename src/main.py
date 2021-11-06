@@ -34,8 +34,8 @@ def main():
         correlations.append(correlation)
 
     mean = np.mean(correlations)
-    print(mean)
-    print(list(zip(combinations, correlations)))
+    std = np.std(correlations)
+    print(mean, std)
 
 
 if __name__ == "__main__":
