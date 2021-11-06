@@ -6,7 +6,8 @@ try:
 except:
     pass
 
-from utils import DataClass, Utils
+from utils import DataClass, get_combinations, get_correlation
+from scipy.stats import chisquare
 
 
 def main():
@@ -14,13 +15,15 @@ def main():
     api_key = os.getenv("API_KEY")
     api_secret = os.getenv("API_SECRET")
 
-    data = DataClass(api_key, api_secret)
+    data_class = DataClass(api_key, api_secret)
 
     # https://youtu.be/mJTrQfzr0R4 - Modern portfolio theory
     # https://youtu.be/vHzlZECzyPE - Correlation
 
-    # Get the data pairs
-    print(Utils.get_correlations(data, 15, limit=10))
+    tickers = [x + "USDT" for x in ["BTC", "ETH", "BNB", "SOL",
+                                    "FTM", "LINK", "AVAX", "GRT", "RUNE", "ALGO", "BUSD"]]
+    combinations = get_combinations(tickers)
+    print(list(combinations))
 
 
 if __name__ == "__main__":

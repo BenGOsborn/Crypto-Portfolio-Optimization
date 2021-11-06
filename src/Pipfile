@@ -7,6 +7,7 @@ name = "pypi"
 python-binance = "*"
 pandas = "*"
 numpy = "*"
+scipy = "*"
 
 [dev-packages]
 autopep8 = "*"
