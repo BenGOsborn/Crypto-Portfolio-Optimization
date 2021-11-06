@@ -22,9 +22,15 @@ def main():
 
     pairs = [x + "USDT" for x in ["BTC", "ETH", "BNB", "SOL",
                                   "FTM", "LINK", "AVAX", "GRT", "RUNE", "ALGO", "BUSD"]]
-    cache = {pair: data_class.get_data(pair, 60) for pair in pairs}
-    print(cache)
-    combinations = get_combinations(pairs)
+    cache = {pair: data_class.get_data(pair, 30) for pair in pairs}
+
+    correlations = []
+    for combo in get_combinations(pairs):
+        correlation = get_correlation(cache[combo[0]], cache[combo[1]])
+        correlations.append(correlation)
+
+    result = chisquare(correlations)
+    print(result)
 
 
 if __name__ == "__main__":
