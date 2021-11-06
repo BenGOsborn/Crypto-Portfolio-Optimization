@@ -20,10 +20,11 @@ def main():
     # https://youtu.be/mJTrQfzr0R4 - Modern portfolio theory
     # https://youtu.be/vHzlZECzyPE - Correlation
 
-    tickers = [x + "USDT" for x in ["BTC", "ETH", "BNB", "SOL",
-                                    "FTM", "LINK", "AVAX", "GRT", "RUNE", "ALGO", "BUSD"]]
-    combinations = get_combinations(tickers)
-    print(list(combinations))
+    pairs = [x + "USDT" for x in ["BTC", "ETH", "BNB", "SOL",
+                                  "FTM", "LINK", "AVAX", "GRT", "RUNE", "ALGO", "BUSD"]]
+    cache = {pair: data_class.get_data(pair, 60) for pair in pairs}
+    print(cache)
+    combinations = get_combinations(pairs)
 
 
 if __name__ == "__main__":
