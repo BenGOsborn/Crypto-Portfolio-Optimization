@@ -24,13 +24,16 @@ def main():
                                   "FTM", "LINK", "AVAX", "GRT", "RUNE", "ALGO", "BUSD"]]
     cache = {pair: data_class.get_data(pair, 30) for pair in pairs}
 
+    combinations = get_combinations(pairs)
     correlations = []
-    for combo in get_combinations(pairs):
+    for combo in combinations:
         correlation = get_correlation(cache[combo[0]], cache[combo[1]])
         correlations.append(correlation)
 
     result = chisquare(correlations)
     print(result)
+    print()
+    print(list(zip(combinations, correlations)))
 
 
 if __name__ == "__main__":
