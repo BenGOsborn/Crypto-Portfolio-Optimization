@@ -20,8 +20,8 @@ def main():
     # https://youtu.be/mJTrQfzr0R4 - Modern portfolio theory
     # https://youtu.be/vHzlZECzyPE - Correlation
 
-    pairs = [x + "USDT" for x in ["BTC", "ETH", "BNB", "SOL",
-                                  "FTM", "LINK", "AVAX", "GRT", "RUNE", "ALGO", "BUSD"
+    pairs = [x + "USDT" for x in ["BTC", "ETH", "BNB",
+                                  # "SOL", "FTM", "LINK", "AVAX", "GRT", "RUNE", "ALGO", "BUSD"
                                   ]]
     cache = {pair: data_class.get_data(pair, 30) for pair in pairs}
 
