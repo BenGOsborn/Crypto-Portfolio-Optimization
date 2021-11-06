@@ -7,7 +7,8 @@ except:
     pass
 
 from utils import DataClass, get_combinations, get_correlation
-from scipy.stats import chisquare
+# from scipy.stats import chisquare
+import numpy as np
 
 
 def main():
@@ -29,11 +30,11 @@ def main():
     correlations = []
     for combo in combinations:
         # Because chisquare can only work on numbers and not percentages
-        correlation = get_correlation(cache[combo[0]], cache[combo[1]]) * 100
+        correlation = get_correlation(cache[combo[0]], cache[combo[1]])
         correlations.append(correlation)
 
-    result = chisquare(correlations)
-    print(result)
+    mean = np.mean(correlations)
+    print(mean)
     print(list(zip(combinations, correlations)))
 
 
