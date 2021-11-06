@@ -38,7 +38,7 @@ class DataClass:
 
 
 def get_combinations(pairs: list):
-    return itertools.combinations(pairs, 2)
+    return list(itertools.combinations(pairs, 2))
 
 
 def get_correlation(df1: pd.DataFrame, df2: pd.DataFrame):
