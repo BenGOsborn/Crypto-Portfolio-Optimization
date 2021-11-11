@@ -79,6 +79,10 @@ def main():
     while True:
         # We will loop through and remove the amounts, once an amount has been depleted then we can get rid of it ?
 
+        # Break when the loop exceeds its restrictions
+        if (pos_index >= len(pos_assets) or neg_index >= len(neg_assets)):
+            break
+
         neg_asset = neg_assets[neg_index]
         neg_change = neg_changes[neg_asset]
 
@@ -87,8 +91,11 @@ def main():
 
         # 3 cases - one is bigger than the other, or both resources have depleted to 0 ?
         # **** I ALSO NEED SOME SORT OF WAY OF CONVERTING THIS PRICE TO THE ONE SPECIFIED BY THE PAIR ????
-        if neg_change + pos_change == 0:
-            pairs.append((pos_asset + neg_asset))
+
+        cumulative = neg_change + pos_change
+
+        if cumulative == 0:
+            pairs.append((pos_asset + neg_asset, pos_change))
 
             neg_changes[neg_asset] += pos_change
             pos_changes[pos_asset] -= neg_change
@@ -96,10 +103,14 @@ def main():
             pos_index += 1
             neg_index += 1
 
-        elif neg_change + pos_change > 0:
-            # Just take the amount that the negative can take and then increment the negative but not the positive
+        elif cumulative > 0:
+            # In this case we will just set the negative amount to 0 and the positive amount to the cumulative
+            pairs.append((pos_asset + neg_asset, abs(neg_change)))
 
-            pass
+            neg_changes[neg_asset] = 0
+            pos_changes[pos_asset] -= neg_change
+
+            neg_index += 1
 
         else:
             pass
