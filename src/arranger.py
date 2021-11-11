@@ -126,6 +126,8 @@ def main():
     print("Pairs to trade:", pairs)
     for pair in pairs:
         try:
+            print(client.get_symbol_info(pair[0]), "\n")
+
             order = client.create_test_order(
                 symbol=pair[0],
                 side=Client.SIDE_BUY,
