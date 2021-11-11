@@ -40,12 +40,12 @@ def main():
     total_invested = sum(x for x in owned.values())
     weights = {key: value / total_invested for key, value in owned.items()}
 
-    print(weights)
-
     # Load in the specified portfolio
     new_weights = json.load(open("portfolio.json"))
 
     # **** Now we want to go through and find the assets that we will be removing / adding and what we need to swap them out for
+
+    rel_weights = {}  # **** Contains the calculated differences of the assets
 
 
 if __name__ == "__main__":
