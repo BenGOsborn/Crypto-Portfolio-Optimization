@@ -57,8 +57,14 @@ def main():
         else:
             rel_changes[key] = value
 
-    print(assets)
+    changes = {key: value * total_invested for key,
+               value in rel_changes.items()}
+    changes = {key: changes[key]
+               for key in sorted(changes, key=lambda x: changes[x])}
+
+    # **** Now we will look at all of the negative ones and use them to fund pairs against the positve pairs until they run out (through some sort of stack mechanism ?)
 
 
+# Run the program if the file is run directly
 if __name__ == "__main__":
     main()
