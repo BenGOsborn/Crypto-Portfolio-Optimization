@@ -26,6 +26,7 @@ def main():
     # Get the owned balances
     balances = client.get_account()["balances"]
     owned = {}
+    assets = {}
     for balance in balances:
         asset = balance["asset"]
         ticker = asset + "BUSD" if asset != "BUSD" else asset + "USDT"
@@ -35,6 +36,7 @@ def main():
         if float(asset_amount) > 0:
             price = float(client.get_avg_price(symbol=ticker)["price"])
             owned[asset] = price * asset_amount
+            assets[asset] = asset_amount
 
     # Get the weighting of each asset in the portfolio
     total_invested = sum(x for x in owned.values())
@@ -55,7 +57,7 @@ def main():
         else:
             rel_changes[key] = value
 
-    print(rel_changes)
+    print(assets)
 
 
 if __name__ == "__main__":
