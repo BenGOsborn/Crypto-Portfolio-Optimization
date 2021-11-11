@@ -16,6 +16,8 @@ import json
 # 2. Seperate the ones that are decreasing in allocation vs the ones that are gaining in allocation
 # 3. Remove the specified amount from the ones that are decreasing and then use this to fill up the ones that are increasing bit by bit
 
+USD_STABLECOINS = ["BUSD", "USDT"]
+
 
 def main():
     # Initialize the API
@@ -29,7 +31,9 @@ def main():
     assets = {}
     for balance in balances:
         asset = balance["asset"]
-        ticker = asset + "BUSD" if asset != "BUSD" else asset + "USDT"
+        ticker = asset + \
+            USD_STABLECOINS[0] if asset != USD_STABLECOINS[0] else asset + \
+            USD_STABLECOINS[1]
         asset_amount = float(balance["free"])
 
         # Calculate the USD invested in each token
@@ -57,7 +61,7 @@ def main():
         else:
             rel_changes[key] = value
 
-    changes = {key: int(value * total_invested) for key,
+    changes = {key: value * total_invested for key,
                value in rel_changes.items()}
 
     # Order the lists to have the most subtracted go with the most added first
@@ -74,8 +78,6 @@ def main():
     pos_index = 0
     neg_index = 0
     while True:
-        # We will loop through and remove the amounts, once an amount has been depleted then we can get rid of it ?
-
         # Break when the loop exceeds its restrictions
         if (pos_index >= len(pos_assets) or neg_index >= len(neg_assets)):
             break
@@ -91,8 +93,12 @@ def main():
         cumulative = neg_change + pos_change
         new_ticker = pos_asset + neg_asset
 
+        # Get the trading worths in USD for the asset
+        usd_rate = float(client.get_avg_price(symbol=(
+            pos_asset + USD_STABLECOINS[0] if pos_asset != USD_STABLECOINS[0] else pos_asset + USD_STABLECOINS[1]))["price"])
+
         if cumulative == 0:
-            pairs.append((new_ticker, pos_change))
+            pairs.append((new_ticker, pos_change / usd_rate))
 
             neg_changes[neg_asset] += pos_change
             pos_changes[pos_asset] -= neg_change
@@ -101,8 +107,7 @@ def main():
             neg_index += 1
 
         elif cumulative > 0:
-            # In this case we will just set the negative amount to 0 and the positive amount to the cumulative
-            pairs.append((new_ticker, abs(neg_change)))
+            pairs.append((new_ticker, abs(neg_change) / usd_rate))
 
             neg_changes[neg_asset] = 0
             pos_changes[pos_asset] -= neg_change
@@ -110,15 +115,14 @@ def main():
             neg_index += 1
 
         else:
-            pairs.append((new_ticker, pos_change))
+            pairs.append((new_ticker, pos_change / usd_rate))
 
             neg_changes[neg_asset] += pos_change
             pos_changes[pos_asset] = 0
 
             pos_index += 1
 
-    print(pairs)
-
+    # **** We will have to perform buy orders with the given amount of the assets
 
     # Run the program if the file is run directly
 if __name__ == "__main__":
