@@ -43,9 +43,17 @@ def main():
     # Load in the specified portfolio
     new_weights = json.load(open("portfolio.json"))
 
-    # **** Now we want to go through and find the assets that we will be removing / adding and what we need to swap them out for
+    # Now we want to go through and find the assets that we will be removing / adding and what we need to swap them out for
+    rel_weights = {}
+    intersection = set(weights.keys()).intersection(new_weights.keys())
 
-    rel_weights = {}  # **** Contains the calculated differences of the assets
+    print(intersection)
+
+    for weight in weights:
+        pass
+
+    for weight in new_weights:
+        pass
 
 
 if __name__ == "__main__":
