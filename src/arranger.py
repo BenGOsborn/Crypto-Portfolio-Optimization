@@ -131,6 +131,7 @@ def main():
                 type=Client.ORDER_TYPE_MARKET,
                 quantity=pair[1]
             )
+            print(order)
 
         except Exception as e:
             print(e)
