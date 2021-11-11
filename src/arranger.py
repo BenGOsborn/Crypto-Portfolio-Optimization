@@ -59,12 +59,28 @@ def main():
 
     changes = {key: value * total_invested for key,
                value in rel_changes.items()}
-    changes = {key: changes[key]
-               for key in sorted(changes, key=lambda x: changes[x])}
 
-    # **** Now we will look at all of the negative ones and use them to fund pairs against the positve pairs until they run out (through some sort of stack mechanism ?)
+    pos_changes = {key: changes[key] for key in sorted(
+        changes, key=lambda x: changes[x]) if changes[key] <= 0}
+    neg_changes = {key: changes[key] for key in sorted(
+        changes, key=lambda x: changes[x], reverse=True) if changes[key] > 0}
 
+    print(pos_changes)
+    print(neg_changes)
 
-# Run the program if the file is run directly
+    # Contains tuples of (pair, amount)
+    neg_assets = neg_changes.keys()
+    pos_assets = pos_changes.keys()
+
+    # **** CONSIDER THE CASE WHERE YOU CAN ONLY BUY OR SELL ASSETS ALSO - LENGTH OF THE POS OR NEG WILL BE 0
+    # **** Also consider the case where there is no portfolio ?
+
+    pairs = []
+    current_neg = 0
+    current_pos = 0
+    while True:
+        pass
+
+        # Run the program if the file is run directly
 if __name__ == "__main__":
     main()
