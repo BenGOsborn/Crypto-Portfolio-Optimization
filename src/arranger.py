@@ -27,18 +27,20 @@ def main():
     balances = client.get_account()["balances"]
     owned = {}
     for balance in balances:
-        ticker = balance["asset"]
-        ticker = ticker + "BUSD" if ticker != "BUSD" else ticker + "USDT"
+        asset = balance["asset"]
+        ticker = asset + "BUSD" if asset != "BUSD" else asset + "USDT"
         asset_amount = float(balance["free"])
 
         # Calculate the USD invested in each token
         if float(asset_amount) > 0:
             price = float(client.get_avg_price(symbol=ticker)["price"])
-            owned[ticker] = price * asset_amount
+            owned[asset] = price * asset_amount
 
     # Get the weighting of each asset in the portfolio
     total_invested = sum(x for x in owned.values())
     weights = {key: value / total_invested for key, value in owned.items()}
+
+    print(weights)
 
     # Load in the specified portfolio
     new_weights = json.load(open("portfolio.json"))
