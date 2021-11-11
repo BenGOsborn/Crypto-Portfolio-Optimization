@@ -57,29 +57,47 @@ def main():
         else:
             rel_changes[key] = value
 
-    changes = {key: value * total_invested for key,
+    changes = {key: int(value * total_invested) for key,
                value in rel_changes.items()}
 
+    # Order the lists to have the most subtracted go with the most added first
     pos_changes = {key: changes[key] for key in sorted(
         changes, key=lambda x: changes[x]) if changes[key] <= 0}
     neg_changes = {key: changes[key] for key in sorted(
         changes, key=lambda x: changes[x], reverse=True) if changes[key] > 0}
 
-    print(pos_changes)
-    print(neg_changes)
-
     # Contains tuples of (pair, amount)
     neg_assets = neg_changes.keys()
     pos_assets = pos_changes.keys()
 
-    # **** CONSIDER THE CASE WHERE YOU CAN ONLY BUY OR SELL ASSETS ALSO - LENGTH OF THE POS OR NEG WILL BE 0
+    # **** CONSIDER THE CASE WHERE YOU CAN ONLY BUY OR SELL ASSETS ALSO - LENGTH OF THE POS OR NEG WILL BE 0 (this cant even happen - there must be a pair to trade or you have run out of money)
     # **** Also consider the case where there is no portfolio ?
 
     pairs = []
-    current_neg = 0
-    current_pos = 0
+    pos_index = 0
+    neg_index = 0
     while True:
-        pass
+        # We will loop through and remove the amounts, once an amount has been depleted then we can get rid of it ?
+
+        neg_asset = neg_assets[neg_index]
+        neg_change = neg_changes[neg_asset]
+
+        pos_asset = pos_assets[pos_index]
+        pos_change = pos_changes[pos_asset]
+
+        # 3 cases - one is bigger than the other, or both resources have depleted to 0 ?
+        # **** I ALSO NEED SOME SORT OF WAY OF CONVERTING THIS PRICE TO THE ONE SPECIFIED BY THE PAIR ????
+        if neg_change + pos_change == 0:
+            pairs.append((pos_asset + neg_asset))
+
+            neg_changes[neg_asset] += pos_change
+            pos_changes[pos_asset] -= neg_change
+
+            pos_index += 1
+            neg_index += 1
+
+        elif neg_change + pos_change
+
 
         # Run the program if the file is run directly
 if __name__ == "__main__":
