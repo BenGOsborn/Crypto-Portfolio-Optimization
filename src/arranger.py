@@ -122,7 +122,18 @@ def main():
 
             pos_index += 1
 
-    # **** We will have to perform buy orders with the given amount of the assets
+    # Create the buy orders for the different assets
+    for pair in pairs:
+        try:
+            order = client.create_test_order(
+                symbol=pair[0],
+                side=Client.SIDE_BUY,
+                type=Client.ORDER_TYPE_MARKET,
+                quantity=pair[1]
+            )
+
+        except Exception as e:
+            print(e)
 
     # Run the program if the file is run directly
 if __name__ == "__main__":
