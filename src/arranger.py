@@ -67,11 +67,13 @@ def main():
         changes, key=lambda x: changes[x], reverse=True) if changes[key] > 0}
 
     # Contains tuples of (pair, amount)
-    neg_assets = neg_changes.keys()
-    pos_assets = pos_changes.keys()
+    neg_assets = list(neg_changes.keys())
+    pos_assets = list(pos_changes.keys())
 
     # **** CONSIDER THE CASE WHERE YOU CAN ONLY BUY OR SELL ASSETS ALSO - LENGTH OF THE POS OR NEG WILL BE 0 (this cant even happen - there must be a pair to trade or you have run out of money)
     # **** Also consider the case where there is no portfolio ?
+
+    print(pos_assets, neg_assets)
 
     pairs = []
     pos_index = 0
@@ -81,6 +83,8 @@ def main():
 
         # Break when the loop exceeds its restrictions
         if (pos_index >= len(pos_assets) or neg_index >= len(neg_assets)):
+            print("Pos:", pos_index, len(pos_assets))
+            print("Neg:", neg_index, len(neg_assets))
             break
 
         neg_asset = neg_assets[neg_index]
@@ -93,9 +97,10 @@ def main():
         # **** I ALSO NEED SOME SORT OF WAY OF CONVERTING THIS PRICE TO THE ONE SPECIFIED BY THE PAIR ????
 
         cumulative = neg_change + pos_change
+        new_ticker = pos_asset + neg_asset
 
         if cumulative == 0:
-            pairs.append((pos_asset + neg_asset, pos_change))
+            pairs.append((new_ticker, pos_change))
 
             neg_changes[neg_asset] += pos_change
             pos_changes[pos_asset] -= neg_change
@@ -105,7 +110,7 @@ def main():
 
         elif cumulative > 0:
             # In this case we will just set the negative amount to 0 and the positive amount to the cumulative
-            pairs.append((pos_asset + neg_asset, abs(neg_change)))
+            pairs.append((new_ticker, abs(neg_change)))
 
             neg_changes[neg_asset] = 0
             pos_changes[pos_asset] -= neg_change
@@ -113,9 +118,16 @@ def main():
             neg_index += 1
 
         else:
-            pass
+            pairs.append((new_ticker, pos_change))
+
+            neg_changes[neg_asset] += pos_change
+            pos_changes[pos_asset] = 0
+
+            pos_index += 1
+
+    print(pairs)
 
 
-        # Run the program if the file is run directly
+    # Run the program if the file is run directly
 if __name__ == "__main__":
     main()
