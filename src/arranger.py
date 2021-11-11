@@ -62,18 +62,13 @@ def main():
 
     # Order the lists to have the most subtracted go with the most added first
     pos_changes = {key: changes[key] for key in sorted(
-        changes, key=lambda x: changes[x]) if changes[key] <= 0}
+        changes, key=lambda x: changes[x]) if changes[key] > 0}
     neg_changes = {key: changes[key] for key in sorted(
-        changes, key=lambda x: changes[x], reverse=True) if changes[key] > 0}
+        changes, key=lambda x: changes[x], reverse=True) if changes[key] <= 0}
 
     # Contains tuples of (pair, amount)
     neg_assets = list(neg_changes.keys())
     pos_assets = list(pos_changes.keys())
-
-    # **** CONSIDER THE CASE WHERE YOU CAN ONLY BUY OR SELL ASSETS ALSO - LENGTH OF THE POS OR NEG WILL BE 0 (this cant even happen - there must be a pair to trade or you have run out of money)
-    # **** Also consider the case where there is no portfolio ?
-
-    print(pos_assets, neg_assets)
 
     pairs = []
     pos_index = 0
@@ -83,19 +78,16 @@ def main():
 
         # Break when the loop exceeds its restrictions
         if (pos_index >= len(pos_assets) or neg_index >= len(neg_assets)):
-            print("Pos:", pos_index, len(pos_assets))
-            print("Neg:", neg_index, len(neg_assets))
             break
 
+        # Get the assets and changes
         neg_asset = neg_assets[neg_index]
         neg_change = neg_changes[neg_asset]
 
         pos_asset = pos_assets[pos_index]
         pos_change = pos_changes[pos_asset]
 
-        # 3 cases - one is bigger than the other, or both resources have depleted to 0 ?
-        # **** I ALSO NEED SOME SORT OF WAY OF CONVERTING THIS PRICE TO THE ONE SPECIFIED BY THE PAIR ????
-
+        # Record the combined remainder and the ticker
         cumulative = neg_change + pos_change
         new_ticker = pos_asset + neg_asset
 
