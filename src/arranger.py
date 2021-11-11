@@ -96,7 +96,13 @@ def main():
             pos_index += 1
             neg_index += 1
 
-        elif neg_change + pos_change
+        elif neg_change + pos_change > 0:
+            # Just take the amount that the negative can take and then increment the negative but not the positive
+
+            pass
+
+        else:
+            pass
 
 
         # Run the program if the file is run directly
