@@ -11,4 +11,4 @@ RUN pipenv install --system --deploy --ignore-pipfile
 COPY main.py arranger.py ./
 
 # Start container
-CMD ["pipenv", "run", "python", "main.py"]
+CMD ["python", "main.py"]
