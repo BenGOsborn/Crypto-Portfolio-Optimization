@@ -1,7 +1,7 @@
 FROM python:3.8-slim-buster
 WORKDIR /app
-COPY main.py arranger.py Pip* ./
 RUN pip install pipenv
-RUN pipenv install
+COPY main.py arranger.py Pipfile* ./
+RUN pipenv install --deploy --ignore-pipfile
 
-CMD pipenv run python main.py
+CMD ["pipenv", "run", "python", "main.py"]
