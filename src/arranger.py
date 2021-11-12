@@ -1,15 +1,6 @@
 # Rearranges the users portfolio to the new assets based off of their old portfolio
 
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-    print("Loaded environment variables from .env")
-except:
-    pass
-
 from binance import Client
-import os
-import json
 
 # Steps
 # 1. Get the previous percentages and compare them with the new ones
@@ -20,10 +11,8 @@ USD_STABLECOINS = ["BUSD", "USDT"]
 DECIMALS = 2
 
 
-def main():
+def arrange(api_key: str, api_secret: str, new_weights: dict):
     # Initialize the API
-    api_key = os.getenv("API_KEY")
-    api_secret = os.getenv("API_SECRET")
     client = Client(api_key, api_secret)
 
     # Get the owned balances
@@ -46,10 +35,6 @@ def main():
     # Get the weighting of each asset in the portfolio
     total_invested = sum(x for x in owned.values())
     weights = {key: value / total_invested for key, value in owned.items()}
-
-    # Load in the specified portfolio
-    new_weights = json.load(open("portfolio.json"))
-    # if sum()
 
     # Now we want to go through and find the assets that we will be removing / adding and what we need to swap them out for
     rel_changes = {}
@@ -144,8 +129,3 @@ def main():
 
         except Exception as e:
             print(e)
-
-
-# Run the program if the file is run directly
-if __name__ == "__main__":
-    main()
