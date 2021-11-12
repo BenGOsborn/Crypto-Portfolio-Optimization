@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 python-binance = "*"
 flask = "*"
+flask-cors = "*"
 
 [dev-packages]
 autopep8 = "*"
