@@ -4,7 +4,7 @@ WORKDIR /app
 RUN pip install pipenv
 
 # Install requirements
-COPY Pipfile* .
+COPY Pipfile* ./
 RUN pipenv install --deploy --ignore-pipfile
 
 # Copy over files
