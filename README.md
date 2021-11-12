@@ -7,6 +7,10 @@
 ### Description
 This script allows you to reallocate the weightings of each asset in your Binance portfolio with a few lines of work. Save yourself hours of time manually calculating the amount of each token you will have to buy and sell from your current portfolio to achieve the portfolio you desire.
 
+### Requirements
+- Python==3.8
+- Pipenv==2021.5.29
+
 ### Instructions
 **Local version**
 1. Make a new ```.env``` file in ```src``` and inside of it specify your Binance ```API_KEY=``` and ```API_SECRET=```
@@ -18,6 +22,7 @@ This script allows you to reallocate the weightings of each asset in your Binanc
     "SOL": 0.2
 }
 ```
+3. Within the ```src``` directory, run the commands ```pipenv install``` and ```pipenv run python local.py```
 
 **API version**
 
