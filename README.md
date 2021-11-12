@@ -30,7 +30,9 @@ Send a ```POST``` request to the API with the following ```JSON``` body
 
 - ```api_key```: your Binance API key
 - ```api_secret```: your Binance API secret key
-- ```portfolio```: a key value ```JSON``` object containing key value pairs of the ticker of each asset you wish to add to your portfolio with its weighting percentage e.g.
+- ```portfolio```: a key value ```JSON``` object containing key value pairs of the ticker of each asset you wish to add to your portfolio with its weighting percentage
+
+e.g.
 ```json
 {
 	"api_key": "abCdEf124...",
