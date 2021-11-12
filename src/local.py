@@ -20,6 +20,10 @@ def main():
 
     # Execute the arrange
     valid, logs = arranger(api_key, api_secret, new_weights)
+    if not valid:
+        print(f"Arrangement failed for reason:\n{logs}")
+    else:
+        print(logs)
 
 
 # Execute the main function if the file is run directly
