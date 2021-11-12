@@ -16,9 +16,6 @@ import json
 # 2. Seperate the ones that are decreasing in allocation vs the ones that are gaining in allocation
 # 3. Remove the specified amount from the ones that are decreasing and then use this to fill up the ones that are increasing bit by bit
 
-# **** WHAT HAPPENS IF THE WEIGHTS DONT SUM TO 1???
-# **** WHY IS IT WHEN I ALREADY HAVE SOME BUSD AND I RESET IT IT DOESNT UPDATE THE VALUE - (ITS WORKING CORRECTLY, BUT WHY ? - COULD BE CONVERSION RATES)
-
 USD_STABLECOINS = ["BUSD", "USDT"]
 DECIMALS = 2
 
@@ -52,6 +49,7 @@ def main():
 
     # Load in the specified portfolio
     new_weights = json.load(open("portfolio.json"))
+    # if sum()
 
     # Now we want to go through and find the assets that we will be removing / adding and what we need to swap them out for
     rel_changes = {}
