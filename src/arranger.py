@@ -131,9 +131,9 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
                 type=Client.ORDER_TYPE_MARKET,
                 quantity=pair[1]
             )
-            log += f"{order}"
+            log += f"{order}\n"
 
         except Exception as e:
-            log += str(e)
+            log += str(e) + "\n"
 
     return (True, log)
