@@ -1,5 +1,6 @@
-from flask import Flask, jsonify, request
+from flask import Flask, request
 from flask_cors import CORS, cross_origin
+import os
 from arranger import arrange
 
 app = Flask(__name__)
@@ -37,5 +38,6 @@ def rearrange():
         return logs, 200
 
 
+# Start the server on the designated port
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", port=os.getenv("PORT", 5000))
