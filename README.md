@@ -1,4 +1,4 @@
-# Crypto Portfolio Rearranger
+# [Crypto Portfolio Rearranger](https://crypto-portfolio-rearranger.herokuapp.com)
 
 ## WHEN YOU USING THIS SCRIPT, YOU HAVE THE POSSIBILITY OF THE SCRIPT LOSING ALL OF YOUR MONEY. DO NOT USE CODE THAT YOU DO NOT UNDERSTAND. I AM NOT RESPONSIBLE FOR ANY MONEY YOU MAY LOSE.
 
@@ -26,7 +26,7 @@ This script allows you to reallocate the weightings of each asset in your Binanc
 
 **API version**
 
-Send a ```POST``` request to the API with the following ```JSON``` body *(an example can be seen below)*
+Send a ```POST``` request to the [API](https://crypto-portfolio-rearranger.herokuapp.com)'s ```/rearrange``` route with the following ```JSON``` body *(an example can be seen below)*
 
 - ```api_key```: your Binance API key
 - ```api_secret```: your Binance API secret key
