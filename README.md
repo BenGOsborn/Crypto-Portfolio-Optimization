@@ -20,6 +20,7 @@ This script allows you to reallocate the weightings of each asset in your Binanc
 ```
 
 **API version**
+
 Send a ```POST``` request to the API with the following ```JSON``` body
     - ```api_key```: your Binance API key
     - ```api_secret```: your Binance API secret key
