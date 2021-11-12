@@ -21,13 +21,13 @@ def rearrange():
     except:
         return "API secret missing", 400
     try:
-        new_weights = body["new_weights"]
+        portfolio = body["portfolio"]
     except:
         return "New weights missing", 400
 
-    if sum(new_weights.values()) != 100:
-        return "Weights must sum to 1", 400
-    new_weights = {key: value / 100 for key, value in new_weights.items()}
+    if sum(portfolio.values()) != 100:
+        return "Portfolio weights must sum to 100", 400
+    new_weights = {key: value / 100 for key, value in portfolio.items()}
 
     # Rearrange the users portfolio and return the logs
     valid, logs = arrange(api_key, api_secret, new_weights)
