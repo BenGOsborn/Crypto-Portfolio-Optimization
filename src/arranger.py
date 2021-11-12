@@ -1,5 +1,3 @@
-# Rearranges the users portfolio to the new assets based off of their old portfolio
-
 from binance import Client
 
 # Steps
@@ -11,7 +9,14 @@ USD_STABLECOINS = ["BUSD", "USDT"]
 DECIMALS = 2
 
 
-def arrange(api_key: str, api_secret: str, new_weights: dict):
+def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
+    '''
+    Rearranges the users portfolio to the new assets based off of their old portfolio
+    '''
+
+    if sum(x for x in new_weights.values()) != 1:
+        return (False, "Portfolio weights must sum to one")
+
     # Initialize the API
     client = Client(api_key, api_secret)
 
@@ -113,11 +118,12 @@ def arrange(api_key: str, api_secret: str, new_weights: dict):
             pos_index += 1
 
     # Create the buy orders for the different assets
+    log = ""
     for pair in pairs:
-        print()
+        log += "\n"
 
         try:
-            print(f"Executing BUY order for '{pair[0]}' of amount '{pair[1]}'")
+            log += f"Executing BUY order for '{pair[0]}' of amount '{pair[1]}'\n"
 
             order = client.create_test_order(
                 symbol=pair[0],
@@ -125,7 +131,9 @@ def arrange(api_key: str, api_secret: str, new_weights: dict):
                 type=Client.ORDER_TYPE_MARKET,
                 quantity=pair[1]
             )
-            print(order)
+            log += "{order}"
 
         except Exception as e:
-            print(e)
+            log += str(e)
+
+    return (True, log)

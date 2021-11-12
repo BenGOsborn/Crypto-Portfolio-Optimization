@@ -7,6 +7,7 @@ except:
 
 import os
 import json
+from arranger import arranger
 
 
 def main():
@@ -16,6 +17,9 @@ def main():
 
     # Load the portfolio
     new_weights = json.load(open("portfolio.json"))
+
+    # Execute the arrange
+    valid, logs = arranger(api_key, api_secret, new_weights)
 
 
 # Execute the main function if the file is run directly
