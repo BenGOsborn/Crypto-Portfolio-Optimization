@@ -98,7 +98,7 @@ def main():
             pos_asset + USD_STABLECOINS[0] if pos_asset != USD_STABLECOINS[0] else pos_asset + USD_STABLECOINS[1]))["price"])
 
         if cumulative == 0:
-            qty = round(pos_change / usd_rate, 8)
+            qty = round(pos_change / usd_rate, 4)
             pairs.append((new_ticker, qty))
 
             neg_changes[neg_asset] += pos_change
@@ -108,7 +108,7 @@ def main():
             neg_index += 1
 
         elif cumulative > 0:
-            qty = round(abs(neg_change) / usd_rate, 8)
+            qty = round(abs(neg_change) / usd_rate, 4)
             pairs.append((new_ticker, qty))
 
             neg_changes[neg_asset] = 0
@@ -117,7 +117,7 @@ def main():
             neg_index += 1
 
         else:
-            qty = round(pos_change / usd_rate, 8)
+            qty = round(pos_change / usd_rate, 4)
             pairs.append((new_ticker, qty))
 
             neg_changes[neg_asset] += pos_change
