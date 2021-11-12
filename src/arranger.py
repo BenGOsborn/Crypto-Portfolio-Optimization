@@ -98,7 +98,8 @@ def main():
             pos_asset + USD_STABLECOINS[0] if pos_asset != USD_STABLECOINS[0] else pos_asset + USD_STABLECOINS[1]))["price"])
 
         if cumulative == 0:
-            pairs.append((new_ticker, pos_change / usd_rate))
+            qty = round(pos_change / usd_rate, 8)
+            pairs.append((new_ticker, qty))
 
             neg_changes[neg_asset] += pos_change
             pos_changes[pos_asset] -= neg_change
@@ -107,7 +108,8 @@ def main():
             neg_index += 1
 
         elif cumulative > 0:
-            pairs.append((new_ticker, abs(neg_change) / usd_rate))
+            qty = round(abs(neg_change) / usd_rate, 8)
+            pairs.append((new_ticker, qty))
 
             neg_changes[neg_asset] = 0
             pos_changes[pos_asset] -= neg_change
@@ -115,7 +117,8 @@ def main():
             neg_index += 1
 
         else:
-            pairs.append((new_ticker, pos_change / usd_rate))
+            qty = round(pos_change / usd_rate, 8)
+            pairs.append((new_ticker, qty))
 
             neg_changes[neg_asset] += pos_change
             pos_changes[pos_asset] = 0
@@ -123,16 +126,16 @@ def main():
             pos_index += 1
 
     # Create the buy orders for the different assets
-    print("Pairs to trade:", pairs)
-    for pair in pairs:
+    for pair in filter(lambda x: x[1] > float(client.get_symbol_info(x[0])['filters'][2]['minQty']), pairs):
         try:
-            print(client.get_symbol_info(pair[0]), "\n")
+            print(f"Executing BUY order for {pair[0]} of amount {pair[1]}")
+            print()
 
             order = client.create_test_order(
                 symbol=pair[0],
                 side=Client.SIDE_BUY,
                 type=Client.ORDER_TYPE_MARKET,
-                quantity=round(pair[1], 6)
+                quantity=pair[1]
             )
             print(order)
 
