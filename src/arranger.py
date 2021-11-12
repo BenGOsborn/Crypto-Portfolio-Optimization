@@ -134,7 +134,7 @@ def main():
         print()
 
         try:
-            print(f"Executing BUY order for {pair[0]} of amount {pair[1]}")
+            print(f"Executing BUY order for '{pair[0]}' of amount '{pair[1]}'")
 
             order = client.create_test_order(
                 symbol=pair[0],
