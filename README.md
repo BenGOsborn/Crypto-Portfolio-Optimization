@@ -10,7 +10,7 @@ This script allows you to reallocate the weightings of each asset in your Binanc
 ### Instructions
 **Local version**
 1. Make a new ```.env``` file in ```src``` and inside of it specify your Binance ```API_KEY=``` and ```API_SECRET=```
-2. Make a new ```portfolio.json``` file in ```src``` and inside of it specify your desired new portfolio assets and weightings, e.g. 
+2. Make a new ```portfolio.json``` file in ```src``` and inside of it specify your desired new portfolio assets and weightings e.g. 
 ```json
 {
     "BNB": 0.4,
