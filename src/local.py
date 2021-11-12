@@ -17,6 +17,9 @@ def main():
 
     # Load the portfolio
     new_weights = json.load(open("portfolio.json"))
+    if sum(new_weights.values()) != 1:
+        print("Portfolio weights must sum to 1")
+        return
 
     # Execute the arrange
     valid, logs = arrange(api_key, api_secret, new_weights)
