@@ -125,7 +125,7 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
         try:
             log += f"Executing BUY order for '{pair[0]}' of amount '{pair[1]}'\n"
 
-            order = client.create_test_order(
+            order = client.create_order(
                 symbol=pair[0],
                 side=Client.SIDE_BUY,
                 type=Client.ORDER_TYPE_MARKET,
