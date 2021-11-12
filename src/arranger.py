@@ -17,6 +17,7 @@ import json
 # 3. Remove the specified amount from the ones that are decreasing and then use this to fill up the ones that are increasing bit by bit
 
 USD_STABLECOINS = ["BUSD", "USDT"]
+DECIMALS = 2
 
 
 def main():
@@ -98,7 +99,7 @@ def main():
             pos_asset + USD_STABLECOINS[0] if pos_asset != USD_STABLECOINS[0] else pos_asset + USD_STABLECOINS[1]))["price"])
 
         if cumulative == 0:
-            qty = round(pos_change / usd_rate, 4)
+            qty = round(pos_change / usd_rate, DECIMALS)
             pairs.append((new_ticker, qty))
 
             neg_changes[neg_asset] += pos_change
@@ -108,7 +109,7 @@ def main():
             neg_index += 1
 
         elif cumulative > 0:
-            qty = round(abs(neg_change) / usd_rate, 4)
+            qty = round(abs(neg_change) / usd_rate, DECIMALS)
             pairs.append((new_ticker, qty))
 
             neg_changes[neg_asset] = 0
@@ -117,7 +118,7 @@ def main():
             neg_index += 1
 
         else:
-            qty = round(pos_change / usd_rate, 4)
+            qty = round(pos_change / usd_rate, DECIMALS)
             pairs.append((new_ticker, qty))
 
             neg_changes[neg_asset] += pos_change
