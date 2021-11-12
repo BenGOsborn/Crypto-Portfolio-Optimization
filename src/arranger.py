@@ -132,6 +132,7 @@ def main():
     # Create the buy orders for the different assets
     for pair in filter(lambda x: x[1] > float(client.get_symbol_info(x[0])['filters'][2]['minQty']), pairs):
         print()
+
         try:
             print(f"Executing BUY order for {pair[0]} of amount {pair[1]}")
 
