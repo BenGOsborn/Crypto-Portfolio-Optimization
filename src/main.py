@@ -16,12 +16,10 @@ def rearrange():
         api_key = body["api_key"]
     except:
         return "API key missing", 400
-
     try:
         api_secret = body["api_secret"]
     except:
         return "API secret missing", 400
-
     try:
         new_weights = body["new_weights"]
     except:
