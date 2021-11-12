@@ -7,7 +7,7 @@ except:
 
 import os
 import json
-from arranger import arranger
+from arranger import arrange
 
 
 def main():
@@ -19,7 +19,7 @@ def main():
     new_weights = json.load(open("portfolio.json"))
 
     # Execute the arrange
-    valid, logs = arranger(api_key, api_secret, new_weights)
+    valid, logs = arrange(api_key, api_secret, new_weights)
     if not valid:
         print(f"Arrangement failed for reason:\n{logs}")
     else:
