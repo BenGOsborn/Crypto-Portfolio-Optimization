@@ -5,9 +5,6 @@ name = "pypi"
 
 [packages]
 python-binance = "*"
-pandas = "*"
-numpy = "*"
-scipy = "*"
 
 [dev-packages]
 autopep8 = "*"
