@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 python-binance = "*"
+flask = "*"
 
 [dev-packages]
 autopep8 = "*"
