@@ -16,6 +16,9 @@ import json
 # 2. Seperate the ones that are decreasing in allocation vs the ones that are gaining in allocation
 # 3. Remove the specified amount from the ones that are decreasing and then use this to fill up the ones that are increasing bit by bit
 
+# **** WHAT HAPPENS IF THE WEIGHTS DONT SUM TO 1???
+# **** WHY IS IT WHEN I ALREADY HAVE SOME BUSD AND I RESET IT IT DOESNT UPDATE THE VALUE - (ITS WORKING CORRECTLY, BUT WHY ? - COULD BE CONVERSION RATES)
+
 USD_STABLECOINS = ["BUSD", "USDT"]
 DECIMALS = 2
 
@@ -128,9 +131,9 @@ def main():
 
     # Create the buy orders for the different assets
     for pair in filter(lambda x: x[1] > float(client.get_symbol_info(x[0])['filters'][2]['minQty']), pairs):
+        print()
         try:
             print(f"Executing BUY order for {pair[0]} of amount {pair[1]}")
-            print()
 
             order = client.create_test_order(
                 symbol=pair[0],
