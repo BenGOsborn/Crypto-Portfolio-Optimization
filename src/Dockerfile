@@ -5,7 +5,7 @@ RUN pip install pipenv
 
 # Install requirements
 COPY Pipfile* ./
-RUN pipenv install --deploy --ignore-pipfile
+RUN pipenv install --system --deploy --ignore-pipfile
 
 # Copy over files
 COPY main.py arranger.py ./
