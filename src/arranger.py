@@ -142,8 +142,8 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
                     # **** CONSIDER THE USD CASES AND IF I CAN MAKE THEM INTO VARIABLES - GOOD CHANCE I CANT
 
                     # Sell the given amount of the token for USD
-                    sell_quantity = pair[1]
                     sell_pair = pair[0][1] + USD_STABLECOINS[0]
+                    sell_quantity = pair[1]
                     order1 = client.create_order(
                         symbol=sell_pair,
                         side=Client.SIDE_SELL,
@@ -153,8 +153,8 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
                     log += f"{order1}\n"
 
                     # Buy back the other token in the original pair withthe amount exchanged in USD
-                    usd_quantity = float(client.get_avg_price(symbol=sell_pair)["price"]) * sell_quantity
                     buy_pair = pair[0][0] + USD_STABLECOINS[0]
+                    usd_quantity = float(client.get_avg_price(symbol=sell_pair)["price"]) * sell_quantity
                     order2 = client.create_order(
                         symbol=buy_pair,
                         side=Client.SIDE_BUY,
