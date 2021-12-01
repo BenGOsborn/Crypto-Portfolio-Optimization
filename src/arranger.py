@@ -142,6 +142,10 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
                 try:
                     # Create a sell order for the asset in terms of BUSD / USDT and then resell it for the other asset - ASSUME THAT BUSD / USDT IS ALWAYS VALID
 
+                    # **** I think this is wrong - since we were originally buying, then we would need to get the amount of the second part of the pair we should of swapped for USD instead
+                    # **** Remember, we were originally going from the "left ticker" to the "right ticker" - the amount to buy is written in terms of the left ticker, but the currency supplied is the right ticker
+                    # **** Therefore we need to get the amount of our right ticker that would of been traded for the left ticker, and that will be our sell quantity instead
+
                     # Sell the given amount of the token for USD
                     sell_pair = pair[0][1] + USD_STABLECOINS[0]
                     sell_quantity = pair[1]
