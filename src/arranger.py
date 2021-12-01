@@ -122,9 +122,6 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
     log = ""
     for pair in pairs:
         # If the pair does not exist, then switch it for BUSD / USDT and back to the other asset
-        try:
-            client.get_ticker(pair[0])
-
             log += "\n"
             try:
                 log += f"Executing BUY order for '{pair[0]}' of amount '{pair[1]}'\n"
@@ -138,16 +135,26 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
                 log += f"{order}\n"
 
             except Exception as e:
-                log += str(e) + "\n"
-        except:
-            # Create a sell order for the asset in terms of BUSD / USDT and then resell it for the other asset - ASSUME THAT BUSD / USDT IS ALWAYS VALID
+                log += str(e) + " - trying to trade assets to USD seperately" + "\n"
+                try:
+                    # Create a sell order for the asset in terms of BUSD / USDT and then resell it for the other asset - ASSUME THAT BUSD / USDT IS ALWAYS VALID
 
-            # **** Maybe this should be the other way around - how do these orders work again
-            buy_pair = pair[0][0] + USD_STABLECOINS[0] if pair[0][0] != USD_STABLECOINS[0] else pair[0][0] + USD_STABLECOINS[1]
+                    # **** CONSIDER THE USD CASES AND IF I CAN MAKE THEM INTO VARIABLES - GOOD CHANCE I CANT
 
-            order1 = client.create_order(
-                symbol=
-            )
-            pass
+                    # Sell the given amount of the token for USD
+                    sell_quantity = pair[1]
+                    sell_pair = pair[0][1] + USD_STABLECOINS[0]
+                    order1 = client.create_order(
+                        symbol=sell_pair,
+                        side=Client.SIDE_SELL,
+                        type=client.ORDER_TYPE_MARKET,
+                        quantity=sell_quantity
+                    )
+
+                    # Buy back the other token in the original pair withthe amount exchanged in USD
+                    # **** Get the price of that same USD coin
+
+                except Exception as e:
+                    log += str(e) + "\n"
 
     return (True, log)
