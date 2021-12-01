@@ -148,7 +148,7 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
 
                     # Sell the given amount of the token for USD
                     sell_pair = pair[0][1] + USD_STABLECOINS[0]
-                    sell_quantity = pair[1]
+                    sell_quantity = pair[1] * round_floor(float(client.get_avg_price(symbol="".join(pair[0])["price"])), DECIMALS) # **** Something needs changing here anyway
                     order1 = client.create_order(
                         symbol=sell_pair,
                         side=Client.SIDE_SELL,
