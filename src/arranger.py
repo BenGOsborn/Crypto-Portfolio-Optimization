@@ -150,9 +150,18 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
                         type=client.ORDER_TYPE_MARKET,
                         quantity=sell_quantity
                     )
+                    log += f"{order1}\n"
 
                     # Buy back the other token in the original pair withthe amount exchanged in USD
-                    # **** Get the price of that same USD coin
+                    usd_quantity = float(client.get_avg_price(symbol=sell_pair)["price"]) * sell_quantity
+                    buy_pair = pair[0][0] + USD_STABLECOINS[0]
+                    order2 = client.create_order(
+                        symbol=buy_pair,
+                        side=Client.SIDE_BUY,
+                        type=Client.ORDER_TYPE_MARKET,
+                        quantity=usd_quantity
+                    )
+                    log += f"{order2}\n"
 
                 except Exception as e:
                     log += str(e) + "\n"
