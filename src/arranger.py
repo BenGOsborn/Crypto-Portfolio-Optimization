@@ -83,7 +83,7 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
 
         # Record the combined remainder and the ticker
         cumulative = neg_change + pos_change
-        new_ticker = pos_asset + neg_asset
+        new_ticker = (pos_asset, neg_asset)
 
         # Get the trading worths in USD for the asset
         usd_rate = float(client.get_avg_price(symbol=(
@@ -116,24 +116,38 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
             pos_changes[pos_asset] = 0
 
             pos_index += 1
+    
 
     # Create the buy orders for the different assets
     log = ""
     for pair in pairs:
-        log += "\n"
-
+        # If the pair does not exist, then switch it for BUSD / USDT and back to the other asset
         try:
-            log += f"Executing BUY order for '{pair[0]}' of amount '{pair[1]}'\n"
+            client.get_ticker(pair[0])
 
-            order = client.create_order(
-                symbol=pair[0],
-                side=Client.SIDE_BUY,
-                type=Client.ORDER_TYPE_MARKET,
-                quantity=pair[1]
+            log += "\n"
+            try:
+                log += f"Executing BUY order for '{pair[0]}' of amount '{pair[1]}'\n"
+
+                order = client.create_order(
+                    symbol="".join(pair[0]),
+                    side=Client.SIDE_BUY,
+                    type=Client.ORDER_TYPE_MARKET,
+                    quantity=pair[1]
+                )
+                log += f"{order}\n"
+
+            except Exception as e:
+                log += str(e) + "\n"
+        except:
+            # Create a sell order for the asset in terms of BUSD / USDT and then resell it for the other asset - ASSUME THAT BUSD / USDT IS ALWAYS VALID
+
+            # **** Maybe this should be the other way around - how do these orders work again
+            buy_pair = pair[0][0] + USD_STABLECOINS[0] if pair[0][0] != USD_STABLECOINS[0] else pair[0][0] + USD_STABLECOINS[1]
+
+            order1 = client.create_order(
+                symbol=
             )
-            log += f"{order}\n"
-
-        except Exception as e:
-            log += str(e) + "\n"
+            pass
 
     return (True, log)
