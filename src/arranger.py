@@ -138,9 +138,7 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
                 log += str(e) + " - trying to trade assets to USD seperately" + "\n"
                 try:
                     # Create a sell order for the asset in terms of BUSD / USDT and then resell it for the other asset - ASSUME THAT BUSD / USDT IS ALWAYS VALID
-
-                    # **** CONSIDER THE USD CASES AND IF I CAN MAKE THEM INTO VARIABLES - GOOD CHANCE I CANT
-
+                    
                     # Sell the given amount of the token for USD
                     sell_pair = pair[0][1] + USD_STABLECOINS[0]
                     sell_quantity = pair[1]
