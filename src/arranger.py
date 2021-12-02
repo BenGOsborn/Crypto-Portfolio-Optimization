@@ -158,7 +158,7 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
                     usd_quantity = sell_quantity * round_floor(float(client.get_avg_price(symbol=sell_pair)["price"]), DECIMALS)
                     order2 = client.create_order(
                         symbol=buy_pair,
-                        side=Client.SIDE_BUY,
+                        side=Client.SIDE_SELL,
                         type=Client.ORDER_TYPE_MARKET,
                         quantity=usd_quantity
                     )
