@@ -142,8 +142,6 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
                 try:
                     # Create a sell order for the asset in terms of BUSD / USDT and then resell it for the other asset - ASSUME THAT BUSD / USDT IS ALWAYS VALID
 
-                    # **** TEST ME
-
                     # Sell the given amount of the token for USD
                     sell_pair = pair[0][1] + USD_STABLECOINS[0]
                     sell_quantity = round_floor(pair[1] / float(client.get_avg_price(symbol="".join(pair[0])["price"])), DECIMALS)
