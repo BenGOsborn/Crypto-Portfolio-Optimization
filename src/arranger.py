@@ -108,6 +108,15 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
             neg_index += 1
 
         elif cumulative > 0:
+            qty = round_floor(abs(neg_change) / pos_usd_rate, DECIMALS)
+            pairs.append((new_ticker, qty, conversion))
+
+            neg_changes[neg_asset] = 0
+            pos_changes[pos_asset] -= neg_change
+
+            neg_index += 1
+
+        else:
             qty = round_floor(pos_change / pos_usd_rate, DECIMALS)
             pairs.append((new_ticker, qty, conversion))
 
