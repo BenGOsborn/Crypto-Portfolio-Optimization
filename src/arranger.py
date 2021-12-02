@@ -90,10 +90,9 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
         cumulative = pos_change + neg_change
         new_ticker = (pos_asset, neg_asset)
 
-        # Get the trading worths in USD for the asset
+        # Get the trading worths in USD for the assets + the conversion rate
         pos_usd_rate = float(client.get_avg_price(symbol=(
             pos_asset + USD_STABLECOINS[0] if pos_asset != USD_STABLECOINS[0] else pos_asset + USD_STABLECOINS[1]))["price"])
-
         neg_usd_rate = float(client.get_avg_price(symbol=(
             neg_asset + USD_STABLECOINS[0] if neg_asset != USD_STABLECOINS[0] else neg_asset + USD_STABLECOINS[1]))["price"])
         conversion = pos_usd_rate / neg_usd_rate
@@ -115,9 +114,10 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
             neg_changes[neg_asset] = 0
             pos_changes[pos_asset] -= neg_change
 
-            neg_index += 1
-
-        else:
+            neg_index += 1                # **** ASSET1:ASSET2
+            # **** Calculate amount of ASSET2 available
+            # **** Sell ASSET2 for USDT
+            # **** Swap USDT for ASSET1
             qty = round_floor(pos_change / pos_usd_rate, DECIMALS)
             pairs.append((new_ticker, qty, conversion))
 
