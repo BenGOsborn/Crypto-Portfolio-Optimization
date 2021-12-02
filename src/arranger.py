@@ -158,7 +158,7 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
 
                     # Buy back the other token in the original pair withthe amount exchanged in USD
                     buy_pair = pair[0][0] + USD_STABLECOINS[0]
-                    buy_quantity = round_floor(pair[1] * float(client.get_avg_price(symbol="".join(pair[0])["price"])), DECIMALS)
+                    buy_quantity = round_floor(pair[1] / float(client.get_avg_price(symbol="".join(pair[0])["price"])), DECIMALS)
                     buy_order = client.create_order(
                         symbol=buy_pair,
                         side=Client.SIDE_BUY,
