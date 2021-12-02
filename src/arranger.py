@@ -9,8 +9,10 @@ import math
 USD_STABLECOINS = ["BUSD", "USDT"]
 DECIMALS = 2
 
+
 def round_floor(number: float, decimals: int):
     return math.floor(number * decimals) / decimals
+
 
 def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
     '''
@@ -91,8 +93,8 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
         # Get the trading worths in USD for the asset
         pos_usd_rate = float(client.get_avg_price(symbol=(
             pos_asset + USD_STABLECOINS[0] if pos_asset != USD_STABLECOINS[0] else pos_asset + USD_STABLECOINS[1]))["price"])
-
-        # **** I need a way of getting the sell quantity of the negative asset
+        neg_usd_rate = float(client.get_avg_price(symbol=(
+            USD_STABLECOINS[0] + neg_asset if neg_asset != USD_STABLECOINS[0] else USD_STABLECOINS[1] + neg_asset))["price"])
 
         if cumulative == 0:
             qty = round_floor(pos_change / pos_usd_rate, DECIMALS)
@@ -121,51 +123,50 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
             pos_changes[pos_asset] = 0
 
             pos_index += 1
-    
 
     # Create the buy orders for the different assets
     log = ""
     for pair in pairs:
         # If the pair does not exist, then switch it for BUSD / USDT and back to the other asset
-            log += "\n"
-            try:
-                log += f"Executing BUY order for '{pair[0]}' of amount '{pair[1]}'\n"
+        log += "\n"
+        try:
+            log += f"Executing BUY order for '{pair[0]}' of amount '{pair[1]}'\n"
 
-                order = client.create_order(
-                    symbol="".join(pair[0]),
+            order = client.create_order(
+                symbol="".join(pair[0]),
+                side=Client.SIDE_BUY,
+                type=Client.ORDER_TYPE_MARKET,
+                quantity=pair[1]
+            )
+            log += f"{order}\n"
+
+        except Exception as e:
+            log += str(e) + " - trying to trade assets to USD seperately" + "\n"
+            try:
+                # Create a sell order for the asset in terms of BUSD / USDT and then resell it for the other asset - ASSUME THAT BUSD / USDT IS ALWAYS VALID
+
+                # Sell the given amount of the token for USD
+                sell_pair = pair[0][1] + USD_STABLECOINS[0]
+                sell_order = client.create_order(
+                    symbol=sell_pair,
+                    side=Client.SIDE_SELL,
+                    type=client.ORDER_TYPE_MARKET,
+                    quantity=pair[2]
+                )
+                log += f"{sell_order}\n"
+
+                # Buy back the other token in the original pair withthe amount exchanged in USD
+                buy_pair = pair[0][0] + USD_STABLECOINS[0]
+                buy_quantity = round_floor(pair[1], DECIMALS)
+                buy_order = client.create_order(
+                    symbol=buy_pair,
                     side=Client.SIDE_BUY,
                     type=Client.ORDER_TYPE_MARKET,
-                    quantity=pair[1]
+                    quantity=buy_quantity
                 )
-                log += f"{order}\n"
+                log += f"{buy_order}\n"
 
             except Exception as e:
-                log += str(e) + " - trying to trade assets to USD seperately" + "\n"
-                try:
-                    # Create a sell order for the asset in terms of BUSD / USDT and then resell it for the other asset - ASSUME THAT BUSD / USDT IS ALWAYS VALID
-
-                    # Sell the given amount of the token for USD
-                    sell_pair = pair[0][1] + USD_STABLECOINS[0]
-                    sell_order = client.create_order(
-                        symbol=sell_pair,
-                        side=Client.SIDE_SELL,
-                        type=client.ORDER_TYPE_MARKET,
-                        quantity=pair[2]
-                    )
-                    log += f"{sell_order}\n"
-
-                    # Buy back the other token in the original pair withthe amount exchanged in USD
-                    buy_pair = pair[0][0] + USD_STABLECOINS[0]
-                    buy_quantity = round_floor(pair[1], DECIMALS)
-                    buy_order = client.create_order(
-                        symbol=buy_pair,
-                        side=Client.SIDE_BUY,
-                        type=Client.ORDER_TYPE_MARKET,
-                        quantity=buy_quantity
-                    )
-                    log += f"{buy_order}\n"
-
-                except Exception as e:
-                    log += str(e) + "\n"
+                log += str(e) + "\n"
 
     return (True, log)
