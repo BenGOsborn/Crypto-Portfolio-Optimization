@@ -145,27 +145,29 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
                 try:
                     # Create a sell order for the asset in terms of BUSD / USDT and then resell it for the other asset - ASSUME THAT BUSD / USDT IS ALWAYS VALID
 
-                    # Sell the given amount of the token for USD
-                    sell_pair = pair[0][1] + USD_STABLECOINS[0]
-                    sell_quantity = round_floor(pair[1] / float(client.get_avg_price(symbol="".join(pair[0])["price"])), DECIMALS)
-                    sell_order = client.create_order(
-                        symbol=sell_pair,
-                        side=Client.SIDE_SELL,
-                        type=client.ORDER_TYPE_MARKET,
-                        quantity=sell_quantity
-                    )
-                    log += f"{sell_order}\n"
+                    # # Sell the given amount of the token for USD
+                    # sell_pair = pair[0][1] + USD_STABLECOINS[0]
+                    # sell_quantity = round_floor(pair[1] / float(client.get_avg_price(symbol="".join(pair[0])["price"])), DECIMALS)
+                    # sell_order = client.create_order(
+                    #     symbol=sell_pair,
+                    #     side=Client.SIDE_SELL,
+                    #     type=client.ORDER_TYPE_MARKET,
+                    #     quantity=sell_quantity
+                    # )
+                    # log += f"{sell_order}\n"
 
-                    # Buy back the other token in the original pair withthe amount exchanged in USD
-                    buy_pair = pair[0][0] + USD_STABLECOINS[0]
-                    buy_quantity = round_floor(pair[1], DECIMALS)
-                    buy_order = client.create_order(
-                        symbol=buy_pair,
-                        side=Client.SIDE_BUY,
-                        type=Client.ORDER_TYPE_MARKET,
-                        quantity=buy_quantity
-                    )
-                    log += f"{buy_order}\n"
+                    # # Buy back the other token in the original pair withthe amount exchanged in USD
+                    # buy_pair = pair[0][0] + USD_STABLECOINS[0]
+                    # buy_quantity = round_floor(pair[1], DECIMALS)
+                    # buy_order = client.create_order(
+                    #     symbol=buy_pair,
+                    #     side=Client.SIDE_BUY,
+                    #     type=Client.ORDER_TYPE_MARKET,
+                    #     quantity=buy_quantity
+                    # )
+                    # log += f"{buy_order}\n"
+
+                    pass
 
                 except Exception as e:
                     log += str(e) + "\n"
