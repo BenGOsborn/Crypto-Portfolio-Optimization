@@ -94,9 +94,13 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
         pos_usd_rate = float(client.get_avg_price(symbol=(
             pos_asset + USD_STABLECOINS[0] if pos_asset != USD_STABLECOINS[0] else pos_asset + USD_STABLECOINS[1]))["price"])
 
+        neg_usd_rate = float(client.get_avg_price(symbol=(
+            neg_asset + USD_STABLECOINS[0] if neg_asset != USD_STABLECOINS[0] else neg_asset + USD_STABLECOINS[1]))["price"])
+        conversion = pos_usd_rate / neg_usd_rate
+
         if cumulative == 0:
             qty = round_floor(pos_change / pos_usd_rate, DECIMALS)
-            pairs.append((new_ticker, qty))
+            pairs.append((new_ticker, qty, conversion))
 
             neg_changes[neg_asset] += pos_change
             pos_changes[pos_asset] -= neg_change
@@ -105,9 +109,8 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
             neg_index += 1
 
         elif cumulative > 0:
-            # **** I am pretty sure that this line is wrong - more investigation is needed
             qty = round_floor(abs(neg_change) / pos_usd_rate, DECIMALS)
-            pairs.append((new_ticker, qty))
+            pairs.append((new_ticker, qty, conversion))
 
             neg_changes[neg_asset] = 0
             pos_changes[pos_asset] -= neg_change
@@ -116,7 +119,7 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
 
         else:
             qty = round_floor(pos_change / pos_usd_rate, DECIMALS)
-            pairs.append((new_ticker, qty))
+            pairs.append((new_ticker, qty, conversion))
 
             neg_changes[neg_asset] += pos_change
             pos_changes[pos_asset] = 0
@@ -144,18 +147,14 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
             try:
                 # Create a sell order for the asset in terms of BUSD / USDT and then resell it for the other asset - ASSUME THAT BUSD / USDT IS ALWAYS VALID
 
-                # **** ASSET1:ASSET2
-                # **** Calculate amount of ASSET2 available
-                # **** Sell ASSET2 for USDT
-                # **** Swap USDT for ASSET1
-
                 # Sell the given amount of the token for USD
                 sell_pair = pair[0][1] + USD_STABLECOINS[0]
+                sell_quantity = round_floor(pair[1] / pair[2], DECIMALS)
                 sell_order = client.create_order(
                     symbol=sell_pair,
                     side=Client.SIDE_SELL,
                     type=client.ORDER_TYPE_MARKET,
-                    quantity=pair[2]
+                    quantity=sell_quantity
                 )
                 log += f"{sell_order}\n"
 
