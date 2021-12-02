@@ -85,19 +85,18 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
         pos_change = pos_changes[pos_asset]
 
         # Record the combined remainder and the ticker
-        cumulative = neg_change + pos_change
+        cumulative = pos_change + neg_change
         new_ticker = (pos_asset, neg_asset)
 
         # Get the trading worths in USD for the asset
-        usd_rate = float(client.get_avg_price(symbol=(
+        pos_usd_rate = float(client.get_avg_price(symbol=(
             pos_asset + USD_STABLECOINS[0] if pos_asset != USD_STABLECOINS[0] else pos_asset + USD_STABLECOINS[1]))["price"])
 
-        # Save the USD prices as a fallback
-        usd_prices = (usd_rate, pos_asset)
+        # **** I need a way of getting the sell quantity of the negative asset
 
         if cumulative == 0:
-            qty = round_floor(pos_change / usd_rate, DECIMALS)
-            pairs.append((new_ticker, qty, usd_prices))
+            qty = round_floor(pos_change / pos_usd_rate, DECIMALS)
+            pairs.append((new_ticker, qty, pos_usd_rate))
 
             neg_changes[neg_asset] += pos_change
             pos_changes[pos_asset] -= neg_change
@@ -106,8 +105,8 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
             neg_index += 1
 
         elif cumulative > 0:
-            qty = round_floor(abs(neg_change) / usd_rate, DECIMALS)
-            pairs.append((new_ticker, qty, usd_prices))
+            qty = round_floor(abs(neg_change) / pos_usd_rate, DECIMALS)
+            pairs.append((new_ticker, qty, pos_usd_rate))
 
             neg_changes[neg_asset] = 0
             pos_changes[pos_asset] -= neg_change
@@ -115,8 +114,8 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
             neg_index += 1
 
         else:
-            qty = round_floor(pos_change / usd_rate, DECIMALS)
-            pairs.append((new_ticker, qty, usd_prices))
+            qty = round_floor(pos_change / pos_usd_rate, DECIMALS)
+            pairs.append((new_ticker, qty, pos_usd_rate))
 
             neg_changes[neg_asset] += pos_change
             pos_changes[pos_asset] = 0
@@ -145,29 +144,26 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
                 try:
                     # Create a sell order for the asset in terms of BUSD / USDT and then resell it for the other asset - ASSUME THAT BUSD / USDT IS ALWAYS VALID
 
-                    # # Sell the given amount of the token for USD
-                    # sell_pair = pair[0][1] + USD_STABLECOINS[0]
-                    # sell_quantity = round_floor(pair[1] / float(client.get_avg_price(symbol="".join(pair[0])["price"])), DECIMALS)
-                    # sell_order = client.create_order(
-                    #     symbol=sell_pair,
-                    #     side=Client.SIDE_SELL,
-                    #     type=client.ORDER_TYPE_MARKET,
-                    #     quantity=sell_quantity
-                    # )
-                    # log += f"{sell_order}\n"
+                    # Sell the given amount of the token for USD
+                    sell_pair = pair[0][1] + USD_STABLECOINS[0]
+                    sell_order = client.create_order(
+                        symbol=sell_pair,
+                        side=Client.SIDE_SELL,
+                        type=client.ORDER_TYPE_MARKET,
+                        quantity=pair[2]
+                    )
+                    log += f"{sell_order}\n"
 
-                    # # Buy back the other token in the original pair withthe amount exchanged in USD
-                    # buy_pair = pair[0][0] + USD_STABLECOINS[0]
-                    # buy_quantity = round_floor(pair[1], DECIMALS)
-                    # buy_order = client.create_order(
-                    #     symbol=buy_pair,
-                    #     side=Client.SIDE_BUY,
-                    #     type=Client.ORDER_TYPE_MARKET,
-                    #     quantity=buy_quantity
-                    # )
-                    # log += f"{buy_order}\n"
-
-                    pass
+                    # Buy back the other token in the original pair withthe amount exchanged in USD
+                    buy_pair = pair[0][0] + USD_STABLECOINS[0]
+                    buy_quantity = round_floor(pair[1], DECIMALS)
+                    buy_order = client.create_order(
+                        symbol=buy_pair,
+                        side=Client.SIDE_BUY,
+                        type=Client.ORDER_TYPE_MARKET,
+                        quantity=buy_quantity
+                    )
+                    log += f"{buy_order}\n"
 
                 except Exception as e:
                     log += str(e) + "\n"
