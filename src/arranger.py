@@ -92,9 +92,12 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
         usd_rate = float(client.get_avg_price(symbol=(
             pos_asset + USD_STABLECOINS[0] if pos_asset != USD_STABLECOINS[0] else pos_asset + USD_STABLECOINS[1]))["price"])
 
+        # Save the USD prices as a fallback
+        usd_prices = (usd_rate, pos_asset)
+
         if cumulative == 0:
             qty = round_floor(pos_change / usd_rate, DECIMALS)
-            pairs.append((new_ticker, qty))
+            pairs.append((new_ticker, qty, usd_prices))
 
             neg_changes[neg_asset] += pos_change
             pos_changes[pos_asset] -= neg_change
@@ -104,7 +107,7 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
 
         elif cumulative > 0:
             qty = round_floor(abs(neg_change) / usd_rate, DECIMALS)
-            pairs.append((new_ticker, qty))
+            pairs.append((new_ticker, qty, usd_prices))
 
             neg_changes[neg_asset] = 0
             pos_changes[pos_asset] -= neg_change
@@ -113,7 +116,7 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
 
         else:
             qty = round_floor(pos_change / usd_rate, DECIMALS)
-            pairs.append((new_ticker, qty))
+            pairs.append((new_ticker, qty, usd_prices))
 
             neg_changes[neg_asset] += pos_change
             pos_changes[pos_asset] = 0
@@ -145,24 +148,24 @@ def arrange(api_key: str, api_secret: str, new_weights: dict) -> tuple:
                     # Sell the given amount of the token for USD
                     sell_pair = pair[0][1] + USD_STABLECOINS[0]
                     sell_quantity = round_floor(pair[1] / float(client.get_avg_price(symbol="".join(pair[0])["price"])), DECIMALS)
-                    order1 = client.create_order(
+                    sell_order = client.create_order(
                         symbol=sell_pair,
                         side=Client.SIDE_SELL,
                         type=client.ORDER_TYPE_MARKET,
                         quantity=sell_quantity
                     )
-                    log += f"{order1}\n"
+                    log += f"{sell_order}\n"
 
                     # Buy back the other token in the original pair withthe amount exchanged in USD
                     buy_pair = pair[0][0] + USD_STABLECOINS[0]
-                    usd_quantity = sell_quantity * round_floor(float(client.get_avg_price(symbol=sell_pair)["price"]), DECIMALS)
-                    order2 = client.create_order(
+                    buy_quantity = round_floor(pair[1] * float(client.get_avg_price(symbol="".join(pair[0])["price"])), DECIMALS)
+                    buy_order = client.create_order(
                         symbol=buy_pair,
-                        side=Client.SIDE_SELL,
+                        side=Client.SIDE_BUY,
                         type=Client.ORDER_TYPE_MARKET,
-                        quantity=usd_quantity
+                        quantity=buy_quantity
                     )
-                    log += f"{order2}\n"
+                    log += f"{buy_order}\n"
 
                 except Exception as e:
                     log += str(e) + "\n"
